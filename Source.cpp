@@ -9,76 +9,72 @@ typedef struct PolyNode_ {
 	struct PolyNode_ *next;
 } PolyNode, *LinkList, Link;
 
-void jianli(LinkList A)
+void jianli()//LinkList A)
 {
-	LinkList p, head, rear;
-	int k = 1;
+	LinkList p, head, rear,record;
 	char c;
 	A = head = rear = (LinkList)malloc(sizeof(struct PolyNode_));
+	record =A;//记录头结点
+	A->coef = 0;
+	A->expn = 0;
 	head->next = NULL;
 	rear->next = NULL;
-	//p = (LinkList)malloc(sizeof(struct PolyNode_));
-	//A->next = p;
-	//rear = p;
-/*	c = getchar();
-	if (c == '-') {
-		k = -1;
-		c = getchar();
-	}
-	else
-		while (c>'0'&&c <= '9') {
-		rear->coef = (c - '0')*k;
-		c = getchar();
-	}*/
-//	do {
-//		c = getchar();
-//	} while (c != '^');
-//	c = getchar();
-	//rear->expn = c - '0';
 	int count=0;//位数
 	int k = 1;//正负
+	printf("请输入多项式：\n");
 	c = getchar();
-	while (c != '\n') {//一次
-		rear->coef = 0;
-		rear->expn = 0;
-		p = (LinkList)malloc(sizeof(struct PolyNode_));
-		p->next = NULL;
-		rear->next = p;
-		rear = p;
-		if (c == '-') {
-			k = -1;
+	c = getchar();
+	while (c!= '\n') {
+		if (c == 'x' || c == '*') {
 			c = getchar();
-			count = 0;
+			continue;
 		}
-		//+号就是到下一个节点了吧？
-		else if (c == '+') {
-			k = 1;
-			c = getchar();
-			count = 0;
-		}
-		else if (c == '^') {//不考虑指数为负
-			count = 0;
-			c = getchar();
-			while (c > '0'&&c <= '9') {
+		if (c == '+' || c == '-' || A->next == NULL) {
+			p = (LinkList)malloc(sizeof(struct PolyNode_));
+			p->coef = 0;
+			p->expn = 0;
+			p->next = NULL;
+			rear->next = p;
+			rear = p;
+			rear->coef = 0;
+			rear->expn = 0;
+
+			if (c == '-') {
+				k = -1;
+				c = getchar();
+				count = 0;
+				continue;
+			}
+			if (c != '+'&&c != '-') {
 				int temp = c - '0';
-				rear->expn = rear->expn + temp * pow(10, count);
+				rear->coef = rear->coef + temp * pow(10, count)*k;
+			}
+			c = getchar();
+		}
+			else if (c == '^') {//不考虑指数为负
+				count = 0;
+				c = getchar();
+				while (c > '0'&&c <= '9') {
+					int temp = c - '0';
+					rear->expn = rear->expn + temp * pow(10, count);
+					count++;
+					c = getchar();//多扫了一个怎么办啊？
+				}
+				count = 0;
+				continue;
+			}
+			else if (c > '0'&&c <= '9') {//add
+				int temp = c - '0';
+				rear->coef = rear->coef + temp * pow(10, count)*k;
 				count++;
 				c = getchar();
+				continue;
 			}
-		}
-		else if (c > '0'&&c <= '9') {//add
-			int temp = c - '0';
-			rear->coef = rear->coef + temp * pow(10, count)*k;
-			count++;
-			c = getchar();
-		}
-		
-//-222*x^2+1*x+3
 
+			//-222*x^2+1*x+3
 		}
-
-	}
 	rear->next = NULL;
+	A = record;
 	printf("建立完成\n");
 }
 
@@ -103,7 +99,7 @@ void qingkong(LinkList A) {
 
 void xianshi(LinkList A) {
 	LinkList p;
-	printf("kaishi\n");
+	printf("start:\n");
 	p = A->next;
 	while (p != NULL) {
 		printf("+%dx^%d", p->coef, p->expn);
@@ -338,9 +334,10 @@ void fz(LinkList A, LinkList &B) {
 	printf("复制完成\n");
 }
 
-
-int main() {
 	LinkList L[10];
+int main() {
+	for (int i = 0;i < 10;i++)
+		L[i] = NULL;
 	int c = 1, i, j, k, n, x, y, m;
 	while (c != 0) {
 		printf("输入要进行的操作\n");
@@ -350,9 +347,9 @@ int main() {
 		case 0:
 			return(0);
 		case 1:   //Input A
-			printf("输入多项式L[i]\n");
+			printf("输入i的位置，将在L[i]位置创建多项式:\n");
 			scanf("%d", &i);
-			jianli(L[i]);
+			jianli(i);
 			break;
 		case 2:
 			printf("输入显示的多项式L[i]\n");
