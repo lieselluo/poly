@@ -9,14 +9,14 @@ typedef struct PolyNode_ {
 	struct PolyNode_ *next;
 } PolyNode, *LinkList, Link;
 
-LinkList L[10];
+LinkList L[10];//test github............
 
 void jianli(int i)//LinkList A)
 {
 	LinkList p, head, rear, record,A;
 	char c;
 	A = head = rear = (LinkList)malloc(sizeof(struct PolyNode_));
-	record = A;//记录头结点
+	record = A;//记录头结点,其实我多写了一步record懒得改了
 	A->coef = 0;
 	A->expn = 0;
 	head->next = NULL;
@@ -48,6 +48,7 @@ void jianli(int i)//LinkList A)
 				continue;
 			}
 			if (c != '+'&&c != '-') {
+				k = 1;
 				int temp = c - '0';
 				rear->coef = rear->coef + temp * pow(10, count)*k;
 			}
@@ -55,6 +56,7 @@ void jianli(int i)//LinkList A)
 		}
 		else if (c == '^') {//不考虑指数为负
 			count = 0;
+			k = 1;
 			c = getchar();
 			while (c > '0'&&c <= '9') {
 				int temp = c - '0';
@@ -72,7 +74,7 @@ void jianli(int i)//LinkList A)
 			c = getchar();
 			continue;
 		}
-
+		count = 0;
 		//-222*x^2+1*x+3
 	}
 	rear->next = NULL;
